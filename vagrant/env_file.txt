@@ -1,0 +1,2 @@
+SALT_API_EVENTS=https://salt-api.my-domain.com:8000/events?token=mytoken
+SUMO_COLLECTOR=https://endpoint.collection.region.sumologic.com/receiver/v1/http/hosted-collector-indicator
