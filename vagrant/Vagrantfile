@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "docker" do |d|
     d.build_image "/vagrant", args: "-t salt-sumo-events"
-    d.run "salt-sumo-events", args: "--env-file /vagrant/env_file.txt"
+    d.run "salt-sumo-events", args: "--env-file /vagrant/vagrant/env_file.txt"
   end
 
   config.vm.box = "ubuntu/xenial64"
