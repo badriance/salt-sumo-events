@@ -3,16 +3,18 @@ import requests
 
 class SaltEventForwarder:
   
-  def __init__(self, salt_api_event_url, sumo_hosted_collector, ssl_no_verify):
+  def __init__(self, salt_api_event_url, sumo_hosted_collector, ssl_no_verify, quiet_mode, print_only):
     self.salt_api_event_url = salt_api_event_url
     self.sumo_hosted_collector = sumo_hosted_collector
     self.ssl_no_verify = ssl_no_verify
     self.skip_logging_tags = ["salt/auth"]
+    self.quiet = quiet_mode
+    self.print_only = print_only
 
   def run(self):
-    print("Starting request to stream events from salt...")
+    self.print_message("Starting request to stream events from salt...")
     s = requests.Session()
-    if (self.ssl_no_verify):
+    if self.ssl_no_verify:
       s.verify = False
     tag = ""
     data = ""
@@ -24,11 +26,12 @@ class SaltEventForwarder:
           tag = line[4:].strip()
         elif tag and line.startswith("data:"):
           data = line[5:].strip()
-          requests.post(self.sumo_hosted_collector, data = {'tag': tag, 'data': data})
-          print("Posted {0} to sumo with {1}\n\n".format(tag, data))
+          if not self.print_only:
+            requests.post(self.sumo_hosted_collector, data = {'tag': tag, 'data': data})
+          self.print_message("{0}Posted {1} to sumo with {2}\n\n".format("Would Have " if self.print_only else "",  tag, data))
           tag = ""
     except KeyboardInterrupt:
-      print "Interrupt signal received. Exiting."
+      self.print_message("Interrupt signal received. Exiting.")
 
   def streaming(self, session):
     headers = {'connection': 'keep-alive', 'content-type': 'application/json', 'transfer-encoding': 'chunked'}
@@ -39,3 +42,6 @@ class SaltEventForwarder:
       if line:
         yield line.strip()
 
+  def print_message(self, message):
+    if not self.quiet:
+      print(message)

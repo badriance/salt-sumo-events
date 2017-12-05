@@ -1,10 +1,16 @@
 #!/usr/bin/python
 
-import sys
+import argparse
 import salt_event_forwarder
 
-if (len(sys.argv) < 3 or len(sys.argv) > 4):
-  print "Usage: main.py <Salt-api-event-url> <sumologic-hosted-collector-url> [--ignore-ssl]"
-else:
-  f = salt_event_forwarder.SaltEventForwarder(sys.argv[1], sys.argv[2], len(sys.argv) == 4 and sys.argv[3] == "--ignore-ssl")
-  f.run()
+parser = argparse.ArgumentParser(description='Salt-Api event forwarding to SumoLogic')
+parser.add_argument('salt_api_event_url', help='URL for your Salt API event end point')
+parser.add_argument('sumologic_hosted_collector_url', help='URL for your sumologic hosted collector')
+parser.add_argument('--ignore_ssl', action='store_true', help='Ignore any SSL complaints with HTTPS connections')
+parser.add_argument('--print_only', action='store_true', help='Do not send anything to sumologic, only print output to console')
+parser.add_argument('--quiet', action='store_true', help='Do not print output to console')
+
+args = parser.parse_args()
+
+f = salt_event_forwarder.SaltEventForwarder(args.salt_api_event_url, args.sumologic_hosted_collector_url, args.ignore_ssl, args.quiet, args.print_only)
+f.run()
