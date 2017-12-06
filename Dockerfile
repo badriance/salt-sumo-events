@@ -4,7 +4,7 @@ RUN apt-get update
 
 RUN apt-get -y install python
 RUN apt-get -y install python-pip
-RUN pip install --upgrade pip
+#RUN pip install --upgrade pip
 RUN pip install pyOpenSSL --upgrade
 
 RUN pip install requests

@@ -1,6 +1,8 @@
 # salt-sumo-events
 Salt-Api events streamed over HTTP(S) forwarded to a SumoLogic hosted appender.
 
+## WARNING  SALT EVENTS CAN CONTAIN SENSITIVE INFORMATION  WARNING
+
 ## Local development/run the container
 
 ### Required software
