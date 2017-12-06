@@ -100,4 +100,6 @@ ENV/
 # mypy
 .mypy_cache/
 
+vagrant/.vagrant/
+
 vagrant/env_file.txt
